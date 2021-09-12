@@ -5,6 +5,13 @@
 #include "xdotool.h"
 #include <algorithm>
 
+#ifndef SPLIT_EMPTY
+#if (QT_VERSION <= QT_VERSION_CHECK(5,14,0))
+#define SPLIT_EMPTY QString::SkipEmptyParts
+#else
+#define SPLIT_EMPTY Qt::SkipEmptyParts
+#endif
+#endif
 
 ShortCut::ShortCut()
 {
@@ -15,7 +22,7 @@ ShortCut::ShortCut()
     // 获取 keyName -> keyCode 映射
     auto keyMap = xdotool->getKeyMap();
     // 加载 FloatBarShortCut
-    auto shortcut = configTool->SearchBarShortCutString.split("+", QString::SkipEmptyParts);
+    auto shortcut = configTool->SearchBarShortCutString.split("+", SPLIT_EMPTY);
     for (auto &it : shortcut)
     {
         if (keyMap.find(it) != keyMap.end())
@@ -27,7 +34,7 @@ ShortCut::ShortCut()
         }
     }
     // 加载 OCRTranslateShortCut
-    shortcut = configTool->OCRTranslateShortCutString.split("+", QString::SkipEmptyParts);
+    shortcut = configTool->OCRTranslateShortCutString.split("+", SPLIT_EMPTY);
     for (auto &it : shortcut)
     {
         if (keyMap.find(it) != keyMap.end())
@@ -39,7 +46,7 @@ ShortCut::ShortCut()
         }
     }
     // 加载 OCRTextShortCut
-    shortcut = configTool->OCRTextShortCutString.split("+", QString::SkipEmptyParts);
+    shortcut = configTool->OCRTextShortCutString.split("+", SPLIT_EMPTY);
     for (auto &it : shortcut)
     {
         if (keyMap.find(it) != keyMap.end())
